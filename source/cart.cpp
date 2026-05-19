@@ -303,11 +303,21 @@ bool Cart::loadCartFromPng(const unsigned char* cartData, size_t size){
 
 
 bool Cart::loadCartFromPng(std::string filename){
+    // Read via get_file_as_buffer so platform path resolution (e.g. .tns
+    // suffixing on TI-Nspire) is applied consistently, then decode in memory.
+    std::vector<char> fileBuffer = get_file_as_buffer(filename);
+    if (fileBuffer.empty()) {
+        LoadError = "cart file not found: " + filename;
+        Logger_Write("%s\n", LoadError.c_str());
+        return false;
+    }
+
     std::vector<unsigned char> image; //the raw pixels
     unsigned width, height;
 
     //decode
-    unsigned error = lodepng::decode(image, width, height, filename);
+    unsigned error = lodepng::decode(image, width, height,
+        reinterpret_cast<const unsigned char*>(fileBuffer.data()), fileBuffer.size());
     //the pixels are now in the vector "image", 4 bytes per pixel, ordered RGBARGBA..., use it as texture, draw it,
 
     //if there's an error, display it

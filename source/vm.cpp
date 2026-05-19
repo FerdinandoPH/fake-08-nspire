@@ -1340,14 +1340,16 @@ bool Vm::vm_load(std::string filename, std::string breadcrumb, std::string param
     _prevCartKey = CurrentCartFilename();
     
     bool success = LoadCart(filename);
-    
-    // Only run if cart loaded successfully
-    if (success) {
+
+    // Even on failure, LoadCart replaces _loadedCart with the bios cart so
+    // the load error can be shown. Always vm_run() the resulting cart so the
+    // previous cart's coroutine is dropped; otherwise a cart that ignores
+    // load()'s return value (the PICO-8 norm) would keep calling load()
+    // every frame and spin forever.
+    if (_loadedCart && !_loadedCart->LuaString.empty()) {
         vm_run();
-        return true;
-    } else {
-        return false;
     }
+    return success;
 }
 
 void Vm::vm_reset(){
