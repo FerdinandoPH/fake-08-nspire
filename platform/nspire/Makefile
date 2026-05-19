@@ -17,7 +17,7 @@ ROOT		:= ../..
 SOURCES		:= source $(ROOT)/source $(ROOT)/libs/z8lua $(ROOT)/libs/lodepng $(ROOT)/libs/simpleini $(ROOT)/libs/miniz
 INCLUDES	:= $(SOURCES)
 
-CFLAGS		:= -Wall -ffunction-sections -fdata-sections -Og -g -MMD -MP \
+CFLAGS		:= -Wall -ffunction-sections -fdata-sections -O2 -MMD -MP \
 		   -DVER_STR=\"$(APP_VERSION)\" -D_NSPIRE -DMINIZ_NO_TIME \
 		   -DSYSCALL_DECLS
 # -DSYSCALL_DECLS pre-defines the include guard of <syscall-decls.h>, making
@@ -56,7 +56,7 @@ $(BUILD)/%.o: %.c | $(BUILD)
 # stubs clash with z8lua under C++. We also strip the z8lua include path so
 # the SDK's `#include <lauxlib.h>` resolves to its own (C-only) Lua stubs
 # rather than z8lua's C++ headers.
-GLUE_CFLAGS	:= -Wall -ffunction-sections -fdata-sections -Og -g -MMD -MP \
+GLUE_CFLAGS	:= -Wall -ffunction-sections -fdata-sections -O2 -MMD -MP \
 		   -DVER_STR=\"$(APP_VERSION)\" -D_NSPIRE
 $(BUILD)/nspire_glue.o: source/nspire_glue.c | $(BUILD)
 	$(GCC) $(GLUE_CFLAGS) -c $< -o $@
