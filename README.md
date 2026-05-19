@@ -1,3 +1,16 @@
+# fake-08-nspire
+
+This is a fork of the fake-08 emulator for the PICO-8 fantasy console. I am adding compatibility with the TI-Nspire calculator series. Later, I will try to PR these changes.
+
+You can try the emulator on your TI-Nspire right now. You need to have Ndless installed. Download the .tns from releases, and place your .p8.tns or .p8.png.tns files at /documents/ndless/fake08/p8carts/
+
+Save files will be generated at /documents/ndless/fake08/cdata/
+
+I only have a TI-Nspire CX II, so that's what I tested the emulator with. It's good, with some slowdowns here and there. I'm not sure how well it will run on a CX.
+
+
+
+Original README below
 # fake-08
 
 A Pico 8 player for homebrew consoles. Not related to or supported by Lexaloffle Software. [Latest release](https://github.com/jtothebell/fake-08/releases) includes releases for Nintendo 3DS, Nintendo Switch, Sony PS Vita, Nintendo Wii U, the Miyoo CFW for bittboy and similar consoles, and the Miyoo Mini. If you are feeling extra brave, you can also download build aftifacts from the latest CI runs in the [Actions section](https://github.com/jtothebell/fake-08/actions)
