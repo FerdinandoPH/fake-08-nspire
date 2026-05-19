@@ -197,9 +197,11 @@ void Host::saveSettingsIni(){
 	}
 }
 
+#ifndef _NSPIRE
 std::string Host::getCartDataFile(std::string cartDataKey) {
     return _logFilePrefix + "cdata/" + cartDataKey + ".p8d.txt";
 }
+#endif
 
 std::string Host::getCartDataFileContents(std::string cartDataKey) {
     return get_file_contents(getCartDataFile(cartDataKey));

@@ -258,6 +258,44 @@ jobs:
             platform/libretro/fake08_libretro_gcw0.so
             platform/libretro/fake08_libretro.info
 
+  nspire-standalone:
+    name: TI-Nspire
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules : recursive
+
+      - name: Checkout Ndless SDK Dockerfile
+        uses: actions/checkout@v4
+        with:
+          repository: stepney141/ndless-docker
+          path: ndless-docker
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Ndless SDK image
+        uses: docker/build-push-action@v5
+        with:
+          context: ndless-docker
+          tags: ndless-sdk:local
+          load: true
+          cache-from: type=gha,scope=ndless-sdk
+          cache-to: type=gha,scope=ndless-sdk,mode=max
+
+      - name: Build
+        run: |
+          docker run -e ENABLE_COMPATIBILITY_REPORTING -v $GITHUB_WORKSPACE:/build_dir ndless-sdk:local /bin/sh -ex /build_dir/.github/workflows/buildNspire.sh
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: TI-Nspire
+          path: |
+            platform/nspire/FAKE08.tns
+
   switch-libretro:
     name: switch-libretro
     runs-on: ubuntu-latest
