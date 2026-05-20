@@ -6,6 +6,8 @@ You can try the emulator on your TI-Nspire right now. You need to have Ndless in
 
 Save files will be generated at /documents/ndless/fake08/cdata/
 
+Keys: Touchpad/numbers for directions, var for X, del for O, tab for size change, esc for leaving
+
 I only have a TI-Nspire CX II, so that's what I tested the emulator with. The perfomance is generally good, with some slowdowns here and there. I'm not sure how well it will run on a CX.
 
 
