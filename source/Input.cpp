@@ -31,25 +31,27 @@ void Input::SetState(uint8_t kdown, uint8_t kheld){
         return;
     }
 
-    uint8_t repeatInterval = _memory->hwState.btnpRepeatInterval == 0 
-        ? 4 
-        : _memory->hwState.btnpRepeatDelay;
+    uint8_t repeatInterval = _memory->hwState.btnpRepeatInterval == 0
+        ? 4
+        : _memory->hwState.btnpRepeatInterval;
 
     for (int i = 0; i < 7; i ++) {
         bool down = BITMASK(i) & kheld;
 
         _framesHeld[i] = down ? _framesHeld[i] + 1 : 0;
 
-        //update kdown to be true if held for 15 frames, then every 4th after that.
-        //from wiki:
-        //btnp() implements a keyboard-like repeat mechanism: if the player holds 
-        //the button for 15 frames, it registers as on again for one frame, then 
-        //again every four frames after that. The frame counter resets when the 
-        //player releases the button. 
+        //btnp() implements a keyboard-like repeat mechanism: if the player holds
+        //the button for `repeatDelay` frames, it registers as on again for one
+        //frame, then again every `repeatInterval` frames after that. The frame
+        //counter resets when the player releases the button.
+        //
+        //Triggering on (frames - delay) % interval == 0 (instead of frames %
+        //interval) avoids a spurious extra trigger one frame after the initial
+        //repeat when delay isn't a multiple of interval (e.g. 15 / 4 produced
+        //triggers at frames 15 AND 16 — felt like a double press).
 
-        bool repeatPressed = 
-            (_framesHeld[i] == repeatDelay) ||
-            (_framesHeld[i] / repeatDelay >= 1 && _framesHeld[i] % repeatInterval == 0);
+        bool repeatPressed = _framesHeld[i] >= repeatDelay &&
+            ((_framesHeld[i] - repeatDelay) % repeatInterval == 0);
 
         if (repeatPressed) {
             _currentKDown = _currentKDown | BITMASK(i);

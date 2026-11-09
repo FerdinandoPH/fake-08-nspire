@@ -1323,6 +1323,17 @@ void Vm::vm_extcmd(std::string cmd){
     else if (cmd == "shutdown") {
         QueueCartChange(DefaultCartName);
     }
+    else if (cmd == "go_back") {
+        // Return to the cart that load()ed us. _prevCartKey is set in
+        // vm_load before LoadCart, so it's the previous cart's filename.
+        // Fall back to the menu if there's nowhere to go back to.
+        if (!_prevCartKey.empty() && _prevCartKey != CurrentCartFilename()) {
+            QueueCartChange(_prevCartKey);
+        }
+        else {
+            QueueCartChange(DefaultCartName);
+        }
+    }
 }
 
 bool Vm::vm_load(std::string filename, std::string breadcrumb, std::string param){
