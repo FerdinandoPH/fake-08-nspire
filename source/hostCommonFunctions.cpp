@@ -124,8 +124,15 @@ void Host::unpackCarts(){
 	
 }
 
+#ifdef _NSPIRE
+// Ndless only lists/transfers files ending in .tns
+#define SETTINGS_INI_FILENAME "settings.ini.tns"
+#else
+#define SETTINGS_INI_FILENAME "settings.ini"
+#endif
+
 void Host::loadSettingsIni(){
-    std::string settingsIniStr = get_file_contents(_logFilePrefix + "settings.ini");
+    std::string settingsIniStr = get_file_contents(_logFilePrefix + SETTINGS_INI_FILENAME);
 	
 	//File does not exist, fill string with defaults
 	if(settingsIniStr.length() == 0 ){
@@ -184,7 +191,7 @@ void Host::saveSettingsIni(){
     std::string settingsIniStr = "";
     settingsIni.Save(settingsIniStr, false);
 
-    std::string iniPath = _logFilePrefix + "settings.ini";
+    std::string iniPath = _logFilePrefix + SETTINGS_INI_FILENAME;
 
     FILE * file = freopen(iniPath.c_str(), "w", stderr);
     if( file != NULL ) {
